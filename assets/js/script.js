@@ -23,18 +23,63 @@
 var currentDayEl = $('#currentDay');
 
 
-
 function displayTime() {
   var today = dayjs().format('MMM DD, YYYY [at] hh:mm:ss a');
   currentDayEl.text(today);
 }
 
+function colorChange() {
+  for (var i = 9; i < 18; i++) {
+  var id = `hour-${i}`;  
+  var timeBlock = $('#' + id);
+  var currentHour = dayjs().hour();
+  var compare = timeBlock.attr('id').split('-')[1];
+  //console.log(timeBlock.children());
+    if (compare == currentHour) {
+      timeBlock.addClass('present');
+      timeBlock.removeClass('future');
+      timeBlock.removeClass('past')
+    } else if (compare < currentHour) {
+      timeBlock.addClass('past');
+      timeBlock.removeClass('present');
+      timeBlock.removeClass('future')
+    } else if(compare > currentHour) {
+      timeBlock.addClass('future');
+      timeBlock.removeClass('past');
+      timeBlock.removeClass('present')
+    }
 
+    var getSavedText = localStorage.getItem(id);
+    $(timeBlock.children()[1]).val(getSavedText);
 
-displayTime();
-setInterval(displayTime, 1000);
+  }
+}
 
-$('.saveBtn').click(function(event) {
-event.preventDefault();
-alert('it works');
-})
+function init() {
+  var textArray = ['9AM', "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", '4PM', "5PM"];
+  for (var timeSlot of textArray) {
+  //console.log(getSavedText);
+ //console.log(currentText);
+ 
+  // var name = "Justin"
+  // string concat: "name: " + name + "."
+  // template literal: `name: ${name}.`
+  }
+}
+
+$('.saveBtn').on('click', function() {
+  userText = $(this).siblings('.description').val().trim();
+  
+   // textArea = $(this).siblings().text().trim();
+    textArea = $(this).parent().attr('id');
+    //console.log($(this).parent().attr('id'));
+    localStorage.setItem(textArea, JSON.stringify(userText));
+  })
+  
+
+  
+  displayTime();
+  setInterval(displayTime, 1000);
+  colorChange();
+  //init();
+  //(this).siblings
